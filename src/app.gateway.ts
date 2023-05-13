@@ -36,7 +36,7 @@ export class AppGateway
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, text: string): void 
   {
+    console.log('WEBSOCKET TEST PASSED')
     this.wss.emit('msgToClient', text);
-    // return { event: 'msgToClient', data: text };
   }
 }
