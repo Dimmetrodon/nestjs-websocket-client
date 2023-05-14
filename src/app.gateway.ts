@@ -33,10 +33,18 @@ export class AppGateway
     this.logger.log(`Client connected: ${client.id}`);
   }
 
+  //WEBSOCKET ONLY, DOES NOT AFFECT POST-METHOD
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, text: string): void 
   {
     console.log('WEBSOCKET TEST PASSED')
     this.wss.emit('msgToClient', text);
+  }
+
+  @SubscribeMessage('joinRoom')
+  handleRoomJoin(client: Socket, room: string): void 
+  {
+    client.join(room);
+    console.log(`JOINED ROOM: ${room}`)
   }
 }

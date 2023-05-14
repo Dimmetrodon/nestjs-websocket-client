@@ -12,9 +12,16 @@ import { WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { AppGateway } from './app.gateway';
 
-export interface DtoMessage {
+export interface DtoMessageToAll 
+{
     text: string;
-  }
+}
+
+export interface DtoMessageToRoom 
+{
+    room: string;
+    text: string;
+}
 
 @Controller('messages')
 export class MessagesController {
@@ -22,8 +29,8 @@ export class MessagesController {
 
     //@WebSocketServer() wss: Server;
 
-    @Post('test')
-    createMessage(@Body() dto: DtoMessage) 
+    @Post('messagetoall')
+    createMessageToAll(@Body() dto: DtoMessageToAll) 
     {
         if (this.appGateway.wss) 
         {
@@ -35,4 +42,19 @@ export class MessagesController {
             console.log('WebSocket server is not initialized yet');
         }
     }
+
+    @Post('messagetoroom')
+    createMessageToRoom(@Body() dto: DtoMessageToRoom) 
+    {
+        if (this.appGateway.wss) 
+        {
+            this.appGateway.wss.to(dto.room).emit('msgToClient', dto.text);
+            console.log(`send message ${dto.text} to room ${dto.room}`)
+        } 
+        else 
+        {
+            console.log('WebSocket server is not initialized yet');
+        }
+    }
+
 }
