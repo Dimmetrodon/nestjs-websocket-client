@@ -26,8 +26,6 @@ export interface DtoMessageToRoom {
 export class MessagesControllerGrpc {
   constructor(private appGateway: AppGateway) {}
 
-  //@WebSocketServer() wss: Server;
-
   @Post('messagetoall')
   createMessageToAll(@Body() dto: DtoMessageToAll) {
     if (this.appGateway.wss) {
